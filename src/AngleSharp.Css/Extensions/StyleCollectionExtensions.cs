@@ -110,7 +110,18 @@ namespace AngleSharp.Css
         #region Helpers
 
         private static IEnumerable<ICssStyleRule> SortBySpecificity(this IEnumerable<ICssStyleRule> rules, IElement element) =>
-            rules.Where(m => m.Selector?.Match(element) ?? false).OrderBy(m => m.Selector.Specificity);
+            rules.Where(rule => MatchesElement(rule, element)).OrderBy(m => m.Selector.Specificity);
+
+        private static bool MatchesElement(ICssStyleRule rule, IElement element)
+        {
+            if (rule.Selector is not { } selector || !selector.Match(element))
+                return false;
+
+            // Prevent host elements from inheriting ::first-letter declarations (dropcaps) because Logos does not fully support first-letter.
+            
+            return element.IsPseudo(PseudoElementNames.FirstLetter) ||
+                   selector.Text.IndexOf(PseudoElementNames.Separator + PseudoElementNames.FirstLetter, StringComparison.OrdinalIgnoreCase) == -1;
+        }
 
         #endregion
     }

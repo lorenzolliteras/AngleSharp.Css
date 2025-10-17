@@ -22,6 +22,8 @@ namespace AngleSharp.Css
             { PseudoElementNames.Before, element => new PseudoElement(element, PseudoElementNames.Before) },
             { PseudoElementNames.After, element => new PseudoElement(element, PseudoElementNames.After) },
             { PseudoElementNames.Slotted, element => new PseudoElement(element, PseudoElementNames.Slotted) },
+            // Materialized to be ignored later in the process.  Logos does not fully support first-letter.
+            { PseudoElementNames.FirstLetter, element => new PseudoElement(element, PseudoElementNames.FirstLetter) },
         };
 
         /// <summary>
